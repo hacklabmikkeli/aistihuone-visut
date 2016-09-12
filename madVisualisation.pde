@@ -1,5 +1,4 @@
 public final int BAR_COUNT = 10;
-public final int WAVE_COUNT = 4;
 public float maxBarHeight;
 ArrayList<MadBar> bars = new ArrayList<MadBar>();
 ArrayList<MadWave> waves = new ArrayList<MadWave>();
@@ -15,9 +14,10 @@ void setup(){
      bars.add(new MadBar(currentXPos, height - barHeight, barWidth, barHeight, maxBarHeight, 255));
      currentXPos += barWidth;
    }
-   for(int j = 0; j < WAVE_COUNT;j++) {
-     waves.add(new MadWave());
-   }
+   waves.add(new MadWave(#00BFFF));
+   waves.add(new MadWave(#C000FF));
+   waves.add(new MadWave(#FF4000));
+   waves.add(new MadWave(#40FF00));
   //initMindWave();
   //initFearCatcher();
   //initLights();
@@ -55,7 +55,7 @@ void draw() {
       if(addValue > 70) {
         float base = height - (maxBarHeight * 2);
         float value = random(maxBarHeight);
-        wave.update(base - value);
+        wave.pushValue(base - value);
       }
       wave.display();
   }

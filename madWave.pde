@@ -1,20 +1,46 @@
 class MadWave {
-  private int waveSize = 10;
+  private int waveSize = 20;
   private FloatList values;
-  
-  public MadWave(){
+  private FloatList valueBuffer;
+  private color waveColor;
+  private float animationVelocity = 500;
+  private float lastUpdate;
+
+
+  public MadWave(color waveColor){
     this.values = new FloatList();
+    this.valueBuffer = new FloatList();
+    this.waveColor = waveColor;
   }
   
-  void update(float value) {
-    values.append(value);
+  void pushValue(float value) {
+    valueBuffer.append(value);
+  }
+  
+  void update() {
+    float time = millis();
+    float elapsed = ((time - lastUpdate) / 100000) * animationVelocity;
+    if(valueBuffer.size() > 0) {
+      if(elapsed < 1) {
+        if(values.size() < waveSize) {
+          values.append(valueBuffer.get(0));
+        } else {
+          values.append(lerp(values.get(values.size() - 1), valueBuffer.get(0), elapsed));
+        }
+      } else {
+        values.append(valueBuffer.get(0));
+        valueBuffer.remove(0);
+        lastUpdate = time;
+      }
+    }
     if(values.size() > waveSize) {
       values.remove(0);
     }
   }
   
   void display(){
-    stroke(153);
+    update();
+    stroke(waveColor);
     if(values.size() < 2) {
       return;
     }
